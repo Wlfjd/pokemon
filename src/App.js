@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Pokemon } from "./components/Pokemon";
+import { useState } from "react";
+import MockItems from "./pokemons.json";
 
 function App() {
+  const [items, setItems] = useState(MockItems);
+  const [sorted, setSorted] = useState(1);
+  const sortItems = items.sort((a, b) => sorted * (a.id - b.id));
+  const handleDelete = (id) => {
+    const newItems = items.filter((i) => i.id !== id);
+    setItems(newItems);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>
+        <button onClick={() => setSorted(1)}>순서대로</button>
+        <button onClick={() => setSorted(-1)}>반대로</button>
+      </div>
+      <ul>
+        {sortItems.map((item) => (
+          <li key={item.id}>
+            <Pokemon item={item} onDelete={handleDelete}></Pokemon>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
